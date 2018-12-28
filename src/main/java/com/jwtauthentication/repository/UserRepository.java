@@ -1,12 +1,13 @@
 package com.jwtauthentication.repository;
 
-import com.jwtauthentication.model.User;
+import com.jwtauthentication.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
-    User findByUsername(String username);
-    Boolean existsByUsername(String username);
+    User findByUserName(String username);
+    User findByEmail(String email);
+    Boolean existsByUserName(String username);
     Boolean existsByEmail(String email);
 }

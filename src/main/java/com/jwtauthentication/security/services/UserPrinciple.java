@@ -1,7 +1,7 @@
 package com.jwtauthentication.security.services;
 
-import com.jwtauthentication.model.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.jwtauthentication.entity.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -40,13 +40,13 @@ public class UserPrinciple implements UserDetails {
 
     public static UserPrinciple build(User user) {
         List<GrantedAuthority> authorities = user.getRoles().stream().map(role ->
-                new SimpleGrantedAuthority(role.getName().name())
+                new SimpleGrantedAuthority(role.getName())
         ).collect(Collectors.toList());
 
         return new UserPrinciple(
                 user.getId(),
                 user.getName(),
-                user.getUsername(),
+                user.getUserName(),
                 user.getEmail(),
                 user.getPassword(),
                 authorities

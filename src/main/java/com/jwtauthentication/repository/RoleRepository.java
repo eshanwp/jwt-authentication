@@ -2,8 +2,8 @@ package com.jwtauthentication.repository;
 
 import java.util.Optional;
 
-import com.jwtauthentication.model.Role;
-import com.jwtauthentication.model.RoleName;
+import com.jwtauthentication.entity.Role;
+import com.jwtauthentication.entity.RoleName;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

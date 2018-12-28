@@ -1,4 +1,4 @@
-package com.jwtauthentication.model;
+package com.jwtauthentication.entity;
 
 public enum  RoleName {
     ROLE_USER,
