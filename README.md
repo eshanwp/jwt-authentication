@@ -23,19 +23,19 @@ Following technologies being used
 http://localhost:8080/api/auth/signup in your postman and you can find the output running on the port 8080 as 
 shown below
 
-![alt text](https://github.com/eshanwp/jwt-authentication/blob/master/jwt-authentication/img/signup.png)
+![alt text](https://github.com/eshanwp/jwt-authentication/blob/master/img/signup.png)
 
 http://localhost:8080/api/auth/signin in your postman and you can find the output running on the port 8080 as 
 shown below
 
-![alt text](https://github.com/eshanwp/jwt-authentication/blob/master/jwt-authentication/img/signin.png)
+![alt text](https://github.com/eshanwp/jwt-authentication/blob/master/img/signin.png)
 
 http://localhost:8080/api/auth/pm in your postman and you can find the output running on the port 8080 as 
 shown below
 
-![alt text](https://github.com/eshanwp/jwt-authentication/blob/master/jwt-authentication/img/pm.png)
+![alt text](https://github.com/eshanwp/jwt-authentication/blob/master/img/pm.png)
 
 http://localhost:8080/api/auth/admin in your postman and you can find the output running on the port 8080 as 
 shown below
 
-![alt text](https://github.com/eshanwp/jwt-authentication/blob/master/jwt-authentication/img/admin.png)
+![alt text](https://github.com/eshanwp/jwt-authentication/blob/master/img/admin.png)
