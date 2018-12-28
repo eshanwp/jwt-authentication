@@ -1,0 +1,14 @@
+{
+	"name" : "eshan",
+	"username" : "eshanwp",
+	"email" : "a@gmail.com",
+	"role" : ["user","pm"],
+	"password" : "123456789"
+}
+
+
+
+{
+	"username" : "eshanwp",
+	"password" : "123456789"
+}
