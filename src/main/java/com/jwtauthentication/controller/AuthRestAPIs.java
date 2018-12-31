@@ -3,10 +3,12 @@ package com.jwtauthentication.controller;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+import com.jwtauthentication.auth.event.OnRegistrationCompleteEvent;
 import com.jwtauthentication.dto.UserDto;
 import com.jwtauthentication.service.implementation.IUserService;
 import com.jwtauthentication.util.GenericResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.MessageSource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -48,6 +50,9 @@ public class AuthRestAPIs {
     @Autowired
     private MessageSource messageSource;
 
+    @Autowired
+    ApplicationEventPublisher eventPublisher;
+
     private String getAppUrl(HttpServletRequest request) {
         return "http://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
     }
@@ -68,7 +73,7 @@ public class AuthRestAPIs {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<String> registerUser(@Valid @RequestBody UserDto userDto, final HttpServletRequest request) {
+    public GenericResponse registerUser(@Valid @RequestBody UserDto userDto, final HttpServletRequest request) {
 
         System.out.println(userDto.toString());
 
@@ -78,13 +83,13 @@ public class AuthRestAPIs {
 
             String appUrl = getAppUrl(request);
 
-//            eventPublisher.publishEvent(new OnRegistrationCompleteEvent
-//                    (user, request.getLocale(), appUrl));
+            eventPublisher.publishEvent(new OnRegistrationCompleteEvent
+                    (user, appUrl));
 
         }catch (Exception e){
             e.printStackTrace();
         }
 
-        return ResponseEntity.ok().body("User has been successfully created");
+        return new GenericResponse(messageSource.getMessage("auth.message.user.created", null, null));
     }
 }
