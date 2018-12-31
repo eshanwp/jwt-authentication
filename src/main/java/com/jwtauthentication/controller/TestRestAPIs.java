@@ -1,6 +1,9 @@
 package com.jwtauthentication.controller;
 
+import com.jwtauthentication.entity.User;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -27,4 +30,11 @@ public class TestRestAPIs {
 	public String adminAccess() {
 		return ">>> Admin Contents";
 	}
+
+    @GetMapping("/test/all")
+    public String allAccess() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentPrincipalName = ((User) authentication.getPrincipal()).getUserName();
+        return currentPrincipalName;
+    }
 }

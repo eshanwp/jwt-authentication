@@ -1,10 +1,9 @@
-package com.jwtauthentication.security.services;
+package com.jwtauthentication.auth.service;
 
-import com.jwtauthentication.auth.service.LoginAttemptService;
+import com.jwtauthentication.auth.error.UserNotFoundException;
 import com.jwtauthentication.entity.Privilege;
 import com.jwtauthentication.entity.Role;
 import com.jwtauthentication.entity.User;
-import com.jwtauthentication.repository.RoleRepository;
 import com.jwtauthentication.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -27,9 +26,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     UserRepository userRepository;
 
     @Autowired
-    private RoleRepository roleRepository;
-
-    @Autowired
     private LoginAttemptService loginAttemptService;
 
     @Autowired
@@ -39,33 +35,24 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Transactional
     public UserDetails loadUserByUsername(String username)
             throws UsernameNotFoundException {
-
-//        User user = userRepository.findByUsername(username)
-//                	.orElseThrow(() ->
-//                        new UsernameNotFoundException("User Not Found with -> username or email : " + username)
-//        );
-//
-//        return UserPrinciple.build(user);
+        System.out.println("User Name >>>"+username);
 
         String ip = getClientIP();
         if (loginAttemptService.isBlocked(ip)) {
+            System.out.println("Current user is blocked");
             throw new RuntimeException("Current user is blocked");
         }
 
         try {
-            User user = userRepository.findByUserName(username);
+            final User user = userRepository.findByUserName(username);
+
             if (user == null) {
-//                return new org.springframework.security.core.userdetails.User(
-//                        " ", " ", true, true, true, true,
-//                        getAuthorities(Arrays.asList(roleRepository.findByName("ROLE_USER"))));
+                System.out.println("No user found with username: " + username);
+                throw new UserNotFoundException("No user found with username: " + username);
             }
 
-//            return new org.springframework.security.core.userdetails.User(
-//                    user.getEmail(), user.getPassword(), true, true, true, true,
-//                    getAuthorities(user.getRoles()));
-
-            return UserPrinciple.build(user);
-        } catch (Exception e) {
+            return new org.springframework.security.core.userdetails.User(user.getUserName(), user.getPassword(), user.isEnabled(), true, true, true, getAuthorities(user.getRoles()));
+        } catch (final Exception e) {
             throw new RuntimeException(e);
         }
 
