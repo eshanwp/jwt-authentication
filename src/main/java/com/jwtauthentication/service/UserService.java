@@ -3,9 +3,13 @@ package com.jwtauthentication.service;
 import com.jwtauthentication.auth.error.EmailExistsException;
 import com.jwtauthentication.converter.UserConverter;
 import com.jwtauthentication.dto.UserDto;
+import com.jwtauthentication.entity.PasswordResetToken;
 import com.jwtauthentication.entity.User;
+import com.jwtauthentication.entity.VerificationToken;
+import com.jwtauthentication.repository.PasswordResetTokenRepository;
 import com.jwtauthentication.repository.RoleRepository;
 import com.jwtauthentication.repository.UserRepository;
+import com.jwtauthentication.repository.VerificationTokenRepository;
 import com.jwtauthentication.service.implementation.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -27,6 +31,12 @@ public class UserService implements IUserService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private VerificationTokenRepository tokenRepository;
+
+    @Autowired
+    private PasswordResetTokenRepository passwordTokenRepository;
 
     @Override
     public User registerNewUserAccount(UserDto userDto) throws EmailExistsException {
@@ -56,4 +66,52 @@ public class UserService implements IUserService {
         return false;
     }
 
+    //Create verification token
+    @Override
+    public void createVerificationTokenForUser(final User user, final String token) {
+
+        final VerificationToken myToken = new VerificationToken(token, user);
+        tokenRepository.save(myToken);
+    }
+
+    @Override
+    public VerificationToken getVerificationToken(final String VerificationToken) {
+        return tokenRepository.findByToken(VerificationToken);
+    }
+
+    @Override
+    public void saveRegisteredUser(final User user) {
+        userRepository.save(user);
+    }
+
+    @Override
+    public VerificationToken generateNewVerificationToken(final String token) {
+        System.out.println("token >>"+token);
+        VerificationToken vToken = tokenRepository.findByToken(token);
+        System.out.println(">>>"+vToken.toString());
+        vToken.updateToken(UUID.randomUUID()
+                .toString());
+        vToken = tokenRepository.save(vToken);
+        return vToken;
+    }
+
+    @Override
+    public User getUser(String verificationToken) {
+        final VerificationToken token = tokenRepository.findByToken(verificationToken);
+        if (token != null) {
+            return token.getUser();
+        }
+        return null;
+    }
+
+    @Override
+    public User findUserByEmail(final String email) {
+        return userRepository.findByEmail(email);
+    }
+
+    @Override
+    public void createPasswordResetTokenForUser(final User user, final String token) {
+        final PasswordResetToken myToken = new PasswordResetToken(token, user);
+        passwordTokenRepository.save(myToken);
+    }
 }
