@@ -1,6 +1,9 @@
 package com.jwtauthentication.auth.handler;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.web.WebAttributes;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 import org.springframework.stereotype.Component;
 
@@ -17,20 +20,25 @@ import java.io.IOException;
 @Component("authenticationFailureHandler")
 public class CustomAuthenticationFailureHandler extends SimpleUrlAuthenticationFailureHandler {
 
+    @Autowired
+    private MessageSource messageSource;
+
     @Override
     public void onAuthenticationFailure(final HttpServletRequest request, final HttpServletResponse response, final AuthenticationException exception) throws IOException, ServletException {
 //        setDefaultFailureUrl("/login?error=true");
 
         super.onAuthenticationFailure(request, response, exception);
 
+        String errorMessage = messageSource.getMessage("message.badCredentials", null, null);
+
         if (exception.getMessage().equalsIgnoreCase("User is disabled")) {
-            System.out.println("User is disabled");
+            errorMessage = messageSource.getMessage("auth.message.disabled", null, null);
         } else if (exception.getMessage().equalsIgnoreCase("User account has expired")) {
-            System.out.println("User account has expired");
+            errorMessage = messageSource.getMessage("auth.message.expired", null, null);
         } else if (exception.getMessage().equalsIgnoreCase("blocked")) {
-            System.out.println("user is blocked");
+            errorMessage = messageSource.getMessage("auth.message.blocked", null, null);
         }
 
-//        request.getSession().setAttribute(WebAttributes.AUTHENTICATION_EXCEPTION, errorMessage);
+        request.getSession().setAttribute(WebAttributes.AUTHENTICATION_EXCEPTION, errorMessage);
     }
 }

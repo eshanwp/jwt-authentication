@@ -6,6 +6,8 @@ public class PasswordDto {
 
     private String newPassword;
 
+    private String email;
+
     public String getOldPassword() {
         return oldPassword;
     }
@@ -22,5 +24,11 @@ public class PasswordDto {
         this.newPassword = newPassword;
     }
 
+    public String getEmail() {
+        return email;
+    }
 
+    public void setEmail(String email) {
+        this.email = email;
+    }
 }

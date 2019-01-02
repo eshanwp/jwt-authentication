@@ -114,4 +114,17 @@ public class UserService implements IUserService {
         final PasswordResetToken myToken = new PasswordResetToken(token, user);
         passwordTokenRepository.save(myToken);
     }
+
+    @Override
+    public boolean checkIfValidOldPassword(final User user, final String password) {
+        System.out.println("current pw>>>>"+user.getPassword());
+        System.out.println("old password>>>"+password);
+        return passwordEncoder.matches(password, user.getPassword());
+    }
+
+    @Override
+    public void changeUserPassword(final User user, final String password) {
+        user.setPassword(passwordEncoder.encode(password));
+        userRepository.save(user);
+    }
 }

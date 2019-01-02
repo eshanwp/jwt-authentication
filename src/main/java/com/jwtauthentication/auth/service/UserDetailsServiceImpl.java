@@ -35,7 +35,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Transactional
     public UserDetails loadUserByUsername(String username)
             throws UsernameNotFoundException {
-        System.out.println("User Name >>>"+username);
 
         String ip = getClientIP();
         if (loginAttemptService.isBlocked(ip)) {
