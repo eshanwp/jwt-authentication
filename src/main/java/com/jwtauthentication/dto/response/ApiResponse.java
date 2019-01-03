@@ -1,5 +1,8 @@
 package com.jwtauthentication.dto.response;
 
+import org.apache.log4j.Logger;
+import org.springframework.context.MessageSource;
+
 public class ApiResponse {
 
 	private String resultCode;
@@ -21,4 +24,16 @@ public class ApiResponse {
 		this.resultDescription = resultDescription;
 	}
 
+	public static ApiResponse getApiResponse(String resultCode, String resultDescription, MessageSource messageSource, Logger log) {
+
+		ApiResponse apiResponse = new ApiResponse();
+		apiResponse.setResultCode(resultCode);
+
+		String description = messageSource.getMessage(resultDescription, null, null);
+		apiResponse.setResultDescription(description);
+
+		log.info(description);
+
+		return apiResponse;
+	}
 }

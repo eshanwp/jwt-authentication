@@ -2,15 +2,18 @@ package com.jwtauthentication.auth.listener;
 
 import com.jwtauthentication.auth.event.OnRegistrationCompleteEvent;
 import com.jwtauthentication.entity.User;
+import com.jwtauthentication.service.EmailService;
 import com.jwtauthentication.service.implementation.IUserService;
+import freemarker.template.TemplateException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.MessageSource;
 import org.springframework.core.env.Environment;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Component;
 
+import javax.mail.MessagingException;
+import java.io.IOException;
 import java.util.UUID;
 
 @Component
@@ -27,35 +30,32 @@ public class RegistrationListener implements ApplicationListener<OnRegistrationC
     @Autowired
     private Environment env;
 
+    @Autowired
+    private EmailService emailService;
+
     // API
 
     @Override
     public void onApplicationEvent(final OnRegistrationCompleteEvent event) {
-        this.confirmRegistration(event);
+        try {
+            this.confirmRegistration(event);
+        } catch (TemplateException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
     }
 
-    private void confirmRegistration(final OnRegistrationCompleteEvent event) {
+    private void confirmRegistration(final OnRegistrationCompleteEvent event) throws TemplateException, IOException, MessagingException {
         final User user = event.getUser();
         final String token = UUID.randomUUID().toString();
         service.createVerificationTokenForUser(user, token);
 
-        final SimpleMailMessage email = constructEmailMessage(event, user, token);
-        mailSender.send(email);
+        emailService.constructResendVerificationTokenEmail(event, user, token);
+
     }
 
-    //
-
-    private final SimpleMailMessage constructEmailMessage(final OnRegistrationCompleteEvent event, final User user, final String token) {
-        final String recipientAddress = user.getEmail();
-        final String subject = "Registration Confirmation";
-        final String confirmationUrl = event.getAppUrl() + "/registrationConfirm.html?token=" + token;
-        final String message = messageSource.getMessage("auth.message.user.reg", null, null);
-        final SimpleMailMessage email = new SimpleMailMessage();
-        email.setTo(recipientAddress);
-        email.setSubject(subject);
-        email.setText(message + " \r\n" + confirmationUrl);
-        email.setFrom(env.getProperty("support.email"));
-        return email;
-    }
 
 }
