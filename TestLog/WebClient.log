@@ -1,9 +1,4 @@
-2019-01-03 16:26:01 INFO  AuthRestAPIs.resetPassword [235] - resetPassword method started. 
-2019-01-03 16:26:01 INFO  EmailService.constructResetPasswordTokenEmail [77] - constructResetPasswordTokenEmail method started. 
-2019-01-03 16:26:11 INFO  EmailService.getApiResponse [35] - You should receive an Password Reset Email shortly
-2019-01-03 16:30:39 INFO  AuthRestAPIs.showChangePasswordPage [264] - showChangePasswordPage method started. 
-2019-01-03 16:30:39 INFO  AuthRestAPIs.getApiResponse [35] - Valid token.
-2019-01-03 16:31:01 INFO  AuthRestAPIs.showChangePasswordPage [264] - showChangePasswordPage method started. 
-2019-01-03 16:31:01 INFO  AuthRestAPIs.getApiResponse [35] - Invalid token.
-2019-01-03 16:31:06 INFO  AuthRestAPIs.showChangePasswordPage [264] - showChangePasswordPage method started. 
-2019-01-03 16:31:06 INFO  AuthRestAPIs.getApiResponse [35] - Valid token.
+2019-01-04 16:34:07 INFO  AuthRestAPIs.getApiResponse [35] - User has been successfully logged
+2019-01-04 16:34:07 INFO  AuthRestAPIs.authenticateUser [113] - eshanwp has been successfully logged
+2019-01-04 16:34:15 INFO  RoleController.getApiResponse [35] - Role has been successfully saved
+2019-01-04 16:35:13 INFO  RoleController.getApiResponse [35] - Role has been successfully updated
